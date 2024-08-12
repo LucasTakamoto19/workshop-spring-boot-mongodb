@@ -17,6 +17,8 @@ public class UserService {
     @Autowired
     private UserRepository repo;
 
+
+
     public List<User> findAll() {
         return repo.findAll();
     }
@@ -33,6 +35,17 @@ public class UserService {
     public void delete(String id){
         findById(id);
         repo.deleteById(id);
+    }
+
+    public User update(User obj){
+        User newObjt = repo.findById(obj.getId()).orElseThrow(() -> new RuntimeException("Usuario nao encontrado"));
+        updateData(newObjt, obj);
+        return repo.save(newObjt);
+    }
+
+    private void updateData(User newObj, User obj) {
+        newObj.setName(obj.getName());
+        newObj.setEmail(obj.getEmail());
     }
 
     public User fromDTO(UserDTO objDTO){
